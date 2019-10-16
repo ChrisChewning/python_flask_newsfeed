@@ -3,13 +3,12 @@
         <title>News</title>
     </head>
     <body>
-        <h1>Hello, {{ username }}!</h1>
-        <p>{{ link }}</p>
+        <p>{{ today_str }}</p>
 
-        {% for ls in l %}
+        {% for waPo_article in waPo_articles %}
         
-        <a href= {{ ls.link_url }} target="_blank"><p>{{ ls.link_text }}</p></a>
-        <p>{{ ls.link_summary }}</p>
+        <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
+        <p>{{ waPo_article.link_summary }}</p>
         {% endfor %}
         
     </body>

@@ -1,16 +1,21 @@
-<html>
-    <head>
-        <title>News</title>
-    </head>
-    <body>
-        <p>{{ today_str }}</p>
+{% extends "bootstrap/base.html" %}
+    <title>The News Today</title>
+    {% block styles %}
+    {{super()}}
+      <link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}">
+    {% endblock %}
 
+
+
+{% block navbar %}
+    <h1>The News</h1>
+    <div class="container">
         {% for waPo_article in waPo_articles %}
-        
+        <div class="row">
         <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
+        </div>
         <p>{{ waPo_article.link_summary }}</p>
         {% endfor %}
-        
-    </body>
-</html>
+    </div> 
+{% endblock %}
 

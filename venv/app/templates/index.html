@@ -1,8 +1,17 @@
 <html>
     <head>
-        <title>Microblog</title>
+        <title>News</title>
     </head>
     <body>
-        <h1>Hello, Chris!</h1>
+        <h1>Hello, {{ username }}!</h1>
+        <p>{{ link }}</p>
+
+        {% for ls in l %}
+        
+        <a href= {{ ls.link_url }} target="_blank"><p>{{ ls.link_text }}</p></a>
+        <p>{{ ls.link_summary }}</p>
+        {% endfor %}
+        
     </body>
 </html>
+

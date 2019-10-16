@@ -1,4 +1,4 @@
-from app import app
+# from app import app
 
 @app.route('/index')
 {% extends "bootstrap/base.html" %}

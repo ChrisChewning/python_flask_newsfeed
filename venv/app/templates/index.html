@@ -1,14 +1,9 @@
-{% extends "bootstrap/base.html" %}
-    <title>The News Today</title>
-    {% block styles %}
-    {{super()}}
-      <link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}">
-    {% endblock %}
+{% extends "base.html" %}
 
 
 
-{% block navbar %}
-    <h1>The News</h1>
+{% block content %}
+
     <div class="container">
         <h3>Washington Post</h3>
         {% for waPo_article in waPo_articles %}

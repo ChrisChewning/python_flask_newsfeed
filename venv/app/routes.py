@@ -1,5 +1,6 @@
 from flask import render_template
 from app import app #import app variable, which is a member of the app package
+from app.forms import LoginForm
 from flask import Flask, render_template, jsonify
 from bs4 import BeautifulSoup, SoupStrainer
 import requests  #from python library
@@ -48,4 +49,5 @@ def index():
 
 @app.route('/login')
 def login():
-    return render_template('login.html', title='Login')
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)

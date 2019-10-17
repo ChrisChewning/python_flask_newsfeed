@@ -10,6 +10,7 @@
 {% block navbar %}
     <h1>The News</h1>
     <div class="container">
+        <h3>Washington Post</h3>
         {% for waPo_article in waPo_articles %}
         <div class="row">
         <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>

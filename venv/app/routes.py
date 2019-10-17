@@ -11,7 +11,8 @@ source = requests.get('https://www.washingtonpost.com/').text
 soup = BeautifulSoup(source, 'lxml')
 
 front_page = soup.find("section", {"id": "main-content"})
-articles = front_page.findAll(True, {'class':['no-skin flex-item flex-stack normal-air text-align-left wrap-text equalize-height-target', 'no-skin flex-item flex-stack normal-air text-align-left equalize-height-target']}, limit=10)
+articles = front_page.findAll(True, {'class':['headline x-small normal-style text-align-inherit', 'headline small normal-style text-align-inherit', 'headline xx-small normal-style text-align-inherit']})
+                                                                                                                  
 
 
 @app.route('/')
@@ -19,15 +20,18 @@ def index():
     today = date.today()
     today_str = today.strftime("%A, %b %d")
     print(today_str)
+
+    count = 0 
     waPo_articles = []
     for article in articles:
         a = { }
         if article.find('a') is None:
             continue
-        else:
+        elif count <10:
+            count += 1    
+            print(count)
             link = article.find('a')
-            summary = article.find(class_="blurb normal normal-style")
-            print('article.find(a)', link)
+            summary = article.find_next_sibling("div")
             a['link_text'] = link.text
             a['link_url'] = link['href']
             if summary:
@@ -35,6 +39,10 @@ def index():
             else:
                 a['link_summary'] = 'No summary given'
             waPo_articles.append(a)
+        else: 
+            break
+        
+        
     return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
 
 

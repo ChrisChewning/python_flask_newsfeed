@@ -5,5 +5,6 @@ from flask_bootstrap import Bootstrap
 
 Bootstrap(app)
 
+app.config['SECRET_KEY'] = 'ooglyboogly'
 
 #this is for handling the app instance

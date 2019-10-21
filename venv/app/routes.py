@@ -1,7 +1,7 @@
 from flask import render_template
 from app import app #import app variable, which is a member of the app package
 from app.forms import LoginForm
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, redirect, flash, jsonify
 from bs4 import BeautifulSoup, SoupStrainer
 import requests  #from python library
 import urllib.request as urllib2
@@ -47,7 +47,12 @@ def index():
     return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect('/')
     return render_template('login.html', title='Login', form=form)
+

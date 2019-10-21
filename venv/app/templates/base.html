@@ -13,12 +13,21 @@
     <nav class="navbar navbar-default" role="navigation">
         <div class="collapse navbar-collapse">
             <h3 class="navbar-brand navbar-nav navbar-center">The News</h3>
-            <a class="navbar-brand navbar-nav navbar-right" href="/login">Login</a>
-            <a class="navbar-brand navbar-nav navbar-right" href="/">Home</a>
+            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('index') }}">Home</a>
+            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('login') }}">Login</a>
         </div>
     </nav>    
         {% endblock %}
 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     
     {% block content %}
     {% endblock %}

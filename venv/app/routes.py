@@ -1,11 +1,14 @@
-from flask import render_template
-from app import app #import app variable, which is a member of the app package
-from app.forms import LoginForm
+from flask import render_template, url_for
+from app import app, db #import app variable, which is a member of the app package
+from app.forms import LoginForm, RegistrationForm
 from flask import Flask, render_template, redirect, flash, jsonify
 from bs4 import BeautifulSoup, SoupStrainer
 import requests  #from python library
 import urllib.request as urllib2
 from datetime import date
+from app.models import User
+from flask_login import current_user, login_user, logout_user
+
 
 
 source = requests.get('https://www.washingtonpost.com/').text
@@ -49,10 +52,37 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
-        return redirect('/')
-    return render_template('login.html', title='Login', form=form)
+        #query the db. filter by only includes object w. matching username. there will be 0 or 1 result (first())
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        #else call the login_user fn from Flask-Login
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('index'))
+    return render_template('login.html', title='Sign In', form=form)
 
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm() #instatiates it
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('You are now registered.')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)

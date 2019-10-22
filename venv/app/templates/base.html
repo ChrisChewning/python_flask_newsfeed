@@ -14,7 +14,11 @@
         <div class="collapse navbar-collapse">
             <h3 class="navbar-brand navbar-nav navbar-center">The News</h3>
             <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('index') }}">Home</a>
+            {% if current_user.is_anonymous %}
             <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('login') }}">Login</a>
+            {% else %}
+            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
         </div>
     </nav>    
         {% endblock %}

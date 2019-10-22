@@ -10,7 +10,9 @@
         <div class="row">
         <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
         </div>
-        <p>{{ waPo_article.link_summary }}</p>
+        <p class="hide">{{ waPo_article.link_summary }}</p>
+        <button type="button" class="btn btn-primary btn-xs">Summary</button>
+        <button type="button" class="btn btn-warning btn-xs">Save</button>
         {% endfor %}
     </div> 
 {% endblock %}

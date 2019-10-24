@@ -1,4 +1,4 @@
-from flask import render_template, url_for
+from flask import render_template, url_for, request
 from app import app, db #import app variable, which is a member of the app package
 from app.forms import LoginForm, RegistrationForm
 from flask import Flask, render_template, redirect, flash, jsonify
@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 import requests  #from python library
 import urllib.request as urllib2
 from datetime import date
-from app.models import User
+from app.models import User, Article
 from flask_login import current_user, login_user, logout_user
 
 
@@ -19,8 +19,9 @@ articles = front_page.findAll(True, {'class':['headline x-small normal-style tex
                                                                                                                   
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    print('heeeeyyyyy-ooooo')
     today = date.today()
     today_str = today.strftime("%A, %b %d")
     print(today_str)
@@ -33,7 +34,6 @@ def index():
             continue
         elif count <10:
             count += 1    
-            print(count)
             link = article.find('a')
             summary = article.find_next_sibling("div")
             a['link_text'] = link.text
@@ -45,9 +45,24 @@ def index():
             waPo_articles.append(a)
         else: 
             break
-        
-        
+
+    if request.method == 'POST':
+        article = Article(article='testing link') 
+        db.session.add(article)
+        db.session.commit()
+        flash('Saved')
+        #return redirect("/")
+
     return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
+
+
+
+@app.route('/save_article', methods=['POST'])
+def save_article():
+    
+    return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
+
+
 
 
 @app.route('/login', methods=['GET', 'POST'])

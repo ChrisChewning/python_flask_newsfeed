@@ -6,6 +6,8 @@
         {{super()}}
           <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
         {% endblock %}
+
+        <script type=text/javascript src="{{ url_for('static', filename='javascript.js') }}"></script>
 </head>
 
 <body>

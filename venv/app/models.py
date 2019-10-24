@@ -33,8 +33,9 @@ class User(UserMixin, db.Model):
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    article = db.Column(db.String(500), primary_key=True)
-    note = db.Column(db.String(1000))
+    article = db.Column(db.String(500))
+    summary = db.Column(db.String(500))
+    notes = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

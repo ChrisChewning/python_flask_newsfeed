@@ -7,10 +7,11 @@
 
 {% block content %}
 
+<!-- testing TOP LEFT -->
 <td>
-    <form action="{{ url_for('index') }}" method="POST">
+    <form action="{{ url_for('save') }}" method="POST">
         <!-- <input type="hidden" name="save_article"/> -->
-        <input type="submit" class="btn btn-xs btn-danger" value="Testing"/>
+        <input type="submit" class="btn btn-xs btn-danger" value="Testing" name="save_article"/>
     </form>
 </td>
 
@@ -20,9 +21,15 @@
         <div class="row">
             <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
             <button type="button summary" class="btn btn-primary btn-xs" onclick=summary(event)>Summary</button>
-            <form action="/"  method="post">
+            <td>
+                    <form action="{{ url_for('index') }}" method="POST">
+                        <button name="savee_article" class="btn btn-xs btn-warning" value="I am button value">Save</button>
+                    </form>
+                </td>
+
+            <!-- <form action="/"  method="post">
                 <button type="submit" class="btn btn-warning btn-xs" onclick=save_article()>Save</button>
-            </form>
+            </form> -->
 
             <!-- <button type="button summary" class="btn btn-warning btn-xs" onclick=save(event)>Save</button> -->
             <p class="hide" id="summary">{{ waPo_article.link_summary }}</p>

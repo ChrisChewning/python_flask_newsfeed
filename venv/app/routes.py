@@ -29,6 +29,7 @@ def index():
     count = 0 
     waPo_articles = []
     for article in articles:
+
         a = { }
         if article.find('a') is None:
             continue
@@ -38,29 +39,59 @@ def index():
             summary = article.find_next_sibling("div")
             a['link_text'] = link.text
             a['link_url'] = link['href']
+            
+            # article = Article(article=article(link.text))
+            # db.session.add(article)
+            # db.session.commit()
+            # flash('Saved')
+
+
             if summary:
                 a['link_summary'] = summary.text
             else:
                 a['link_summary'] = 'No summary given'
             waPo_articles.append(a)
+
+            
         else: 
             break
 
+        # foo = request.form['s_article']
+        # print(foo)
+
+    # if request.method == 'POST':
+    #     article = Article(article=link.text)
+    #     db.session.add(article)
+    #     db.session.commit()
+    #     flash('Saved')
+    #     #return redirect("/")
+    # test = request.args['save_article']
+    # print(test)
+
+    return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
+
+
+
+# @app.route('/save', methods=['POST'])
+# def save():
+#     saved = request.form['save_article']
+#     print(saved, ' saved me!')
+    
+#     return render_template('index.html')
+
+
+
+@app.route('/save', methods=['POST'])
+def save():
+    saved = request.form['save_article']
+    print(saved, ' saved me!')
     if request.method == 'POST':
-        article = Article(article='testing link') 
+        article = Article(article=saved) #should say Testing
         db.session.add(article)
         db.session.commit()
         flash('Saved')
-        #return redirect("/")
+    return redirect(url_for('index'))
 
-    return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
-
-
-
-@app.route('/save_article', methods=['POST'])
-def save_article():
-    
-    return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
 
 
 

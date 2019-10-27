@@ -47,5 +47,5 @@ class Article(db.Model):
 
 #User.articles has the initializes the User.articles field.
 #This is not an actual field, but instead a 'high-level view of the relationship..."
-#backref defines the name of 
+#backref is an extra field. can't use a field you already have here. 
 #lazy arg defines how the db query for relationship will be issued."

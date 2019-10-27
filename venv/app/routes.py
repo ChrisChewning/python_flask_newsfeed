@@ -28,7 +28,6 @@ def index():
     count = 0 
     waPo_articles = []
     for article in articles:
-
         a = { }
         if article.find('a') is None:
             continue
@@ -38,14 +37,11 @@ def index():
             summary = article.find_next_sibling("div")
             a['link_text'] = link.text
             a['link_url'] = link['href']
-
             if summary:
                 a['link_summary'] = summary.text
             else:
                 a['link_summary'] = 'No summary given'
-            waPo_articles.append(a)
-
-            
+            waPo_articles.append(a)    
         else: 
             break
 
@@ -66,6 +62,29 @@ def save():
     return redirect(url_for('index'))
 
 
+@app.route('/myaccount', methods=['GET', 'POST'])
+@login_required
+def myaccount():
+    article_list = db.session.query(Article).filter(Article.article != None)
+    article_url = db.session.query(Article).filter(Article.url != None)
+
+    return render_template('myaccount.html', article_list = article_list, article_url = article_url)
+
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+@login_required
+def delete():
+    delete_row = request.form['delete_row']  #.get('delete_row') would work also. 
+    print(delete_row, ' <-- this is delete row')
+    delete = Article.query.filter_by(id=delete_row).first()
+    print(delete)
+    db.session.delete(delete)
+    db.session.commit()
+
+    return redirect(url_for('myaccount'))
+
+                #   company=company(name="Jawbone"))
 
 
 
@@ -107,30 +126,5 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/myaccount', methods=['GET', 'POST'])
-@login_required
-def myaccount():
-    # saved = {}
 
-    article_list = db.session.query(Article).filter(Article.article != None)
-    article_url = db.session.query(Article).filter(Article.url != None)
-    
-    print(article_list, ' <--- this is article_list')
-
-    # for a in article_list:
-    #     print(a, ' <-- this is a')
-    #     for u in article_url:
-    #         print(u, ' <-- this is u')
-    #     saved.update({ a : u })
-
-    # saved.update({'hi': 'hello'})
-    # saved.update({article_list : article_url})
-    
-    # print(saved)
-
-    # for a in article_list:
-    #     my_saved_articles.append(a)
-
-
-    return render_template('myaccount.html', article_list = article_list, article_url = article_url)
 

@@ -7,9 +7,14 @@
 
   {% for a in article_list %}
     <a href= {{a.url}} target="_blank"><p>{{a.article}}</p></a>
+        <form action="{{ url_for('delete') }}" method="POST">
+            <button class="btn btn-xs btn-danger">
+            <input type='hidden' value= {{a.id}}  name="delete_row" >
+            Delete
+            </button>
+        </form>
   {% endfor %}
 
 
 {% endblock %}
 
-<!-- <a href= {{ a.url }} target="_blank"><p>{{ a.article }}</p></a> -->

@@ -3,11 +3,13 @@
 
 {% block content %}
 
-  <h1>Books</h1>
-  {% for article in articles %}
-    <p>{{article}}</p>
+  <h1>My Saved Articles</h1>
+
+  {% for a in article_list %}
+    <a href= {{a.url}} target="_blank"><p>{{a.article}}</p></a>
   {% endfor %}
-</body>
-</html>
+
 
 {% endblock %}
+
+<!-- <a href= {{ a.url }} target="_blank"><p>{{ a.article }}</p></a> -->

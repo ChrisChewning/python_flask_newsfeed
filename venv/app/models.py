@@ -34,6 +34,7 @@ class User(UserMixin, db.Model):
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     article = db.Column(db.String(500))
+    url = db.Column(db.String(250))
     summary = db.Column(db.String(500))
     notes = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)

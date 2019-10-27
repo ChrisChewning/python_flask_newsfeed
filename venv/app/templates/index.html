@@ -6,15 +6,6 @@
 
 
 {% block content %}
-
-<!-- testing TOP LEFT -->
-<td>
-    <form action="{{ url_for('save') }}" method="POST">
-        <!-- <input type="hidden" name="save_article"/> -->
-        <input type="submit" class="btn btn-xs btn-danger" value="Testing" name="save_article"/>
-    </form>
-</td>
-
     <div class="container">
         <h3>Washington Post</h3>
         {% for waPo_article in waPo_articles %}
@@ -22,27 +13,17 @@
             <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
             <button type="button summary" class="btn btn-primary btn-xs" onclick=summary(event)>Summary</button>
             <td>
-                    <form action="{{ url_for('index') }}" method="POST">
-                        <button name="savee_article" class="btn btn-xs btn-warning" value="I am button value">Save</button>
+                    <form action="{{ url_for('save') }}" method="POST">
+                        <button class="btn btn-xs btn-warning">
+                        <input type='hidden' value= {{ waPo_article.link_url }} name="save_url" >
+                        <input type='hidden' value='{{ waPo_article.link_text }}' name="save_article" >
+                        Save
+                        </button>
+                        <!-- <input type="hidden" name="Id[]" value="85" /> -->
                     </form>
                 </td>
-
-            <!-- <form action="/"  method="post">
-                <button type="submit" class="btn btn-warning btn-xs" onclick=save_article()>Save</button>
-            </form> -->
-
-            <!-- <button type="button summary" class="btn btn-warning btn-xs" onclick=save(event)>Save</button> -->
             <p class="hide" id="summary">{{ waPo_article.link_summary }}</p>
         </div>
         {% endfor %}
     </div> 
 {% endblock %}
-<!-- 
-
-<form action="{{ url_for('my_form') }}" method='POST'>
-        <div>
-          <textarea id="comment_content" name="comment_content"></textarea>
-          <span class="character-counter" ></span></div>
-        <div>
-          <button type="submit" class="btn waves-effect waves-light">GÖNDER</button>
-        </div> -->

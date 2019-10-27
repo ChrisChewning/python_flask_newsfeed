@@ -7,8 +7,8 @@ import requests  #from python library
 import urllib.request as urllib2
 from datetime import date
 from app.models import User, Article
-from flask_login import current_user, login_user, logout_user
-
+from flask_login import current_user, login_user, logout_user, login_required
+from functools import wraps
 
 
 source = requests.get('https://www.washingtonpost.com/').text
@@ -21,7 +21,6 @@ articles = front_page.findAll(True, {'class':['headline x-small normal-style tex
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    print('heeeeyyyyy-ooooo')
     today = date.today()
     today_str = today.strftime("%A, %b %d")
     print(today_str)
@@ -39,12 +38,6 @@ def index():
             summary = article.find_next_sibling("div")
             a['link_text'] = link.text
             a['link_url'] = link['href']
-            
-            # article = Article(article=article(link.text))
-            # db.session.add(article)
-            # db.session.commit()
-            # flash('Saved')
-
 
             if summary:
                 a['link_summary'] = summary.text
@@ -56,38 +49,18 @@ def index():
         else: 
             break
 
-        # foo = request.form['s_article']
-        # print(foo)
-
-    # if request.method == 'POST':
-    #     article = Article(article=link.text)
-    #     db.session.add(article)
-    #     db.session.commit()
-    #     flash('Saved')
-    #     #return redirect("/")
-    # test = request.args['save_article']
-    # print(test)
-
     return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
 
-
-
-# @app.route('/save', methods=['POST'])
-# def save():
-#     saved = request.form['save_article']
-#     print(saved, ' saved me!')
-    
-#     return render_template('index.html')
 
 
 
 @app.route('/save', methods=['POST'])
 def save():
-    saved = request.form['save_article']
-    print(saved, ' saved me!')
+    save_article = request.form['save_article']
+    save_url = request.form['save_url']
     if request.method == 'POST':
-        article = Article(article=saved) #should say Testing
-        db.session.add(article)
+        new_row = Article(article = save_article, url=save_url)
+        db.session.add(new_row)
         db.session.commit()
         flash('Saved')
     return redirect(url_for('index'))
@@ -132,3 +105,32 @@ def register():
         flash('You are now registered.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/myaccount', methods=['GET', 'POST'])
+@login_required
+def myaccount():
+    # saved = {}
+
+    article_list = db.session.query(Article).filter(Article.article != None)
+    article_url = db.session.query(Article).filter(Article.url != None)
+    
+    print(article_list, ' <--- this is article_list')
+
+    # for a in article_list:
+    #     print(a, ' <-- this is a')
+    #     for u in article_url:
+    #         print(u, ' <-- this is u')
+    #     saved.update({ a : u })
+
+    # saved.update({'hi': 'hello'})
+    # saved.update({article_list : article_url})
+    
+    # print(saved)
+
+    # for a in article_list:
+    #     my_saved_articles.append(a)
+
+
+    return render_template('myaccount.html', article_list = article_list, article_url = article_url)
+

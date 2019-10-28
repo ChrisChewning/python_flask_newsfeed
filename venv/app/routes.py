@@ -1,5 +1,5 @@
 from flask import render_template, url_for, request
-from app import app, db #import app variable, which is a member of the app package
+from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from flask import Flask, render_template, redirect, flash, jsonify
 from bs4 import BeautifulSoup, SoupStrainer
@@ -8,7 +8,6 @@ import urllib.request as urllib2
 from datetime import date
 from app.models import User, Article
 from flask_login import current_user, login_user, logout_user, login_required
-from functools import wraps
 
 
 source = requests.get('https://www.washingtonpost.com/').text
@@ -55,7 +54,7 @@ def save():
     save_article = request.form['save_article']
     save_url = request.form['save_url']
     if request.method == 'POST':
-        new_row = Article(article = save_article, url=save_url)
+        new_row = Article(article = save_article, url=save_url, user_id = current_user.id)
         db.session.add(new_row)
         db.session.commit()
         flash('Saved')
@@ -65,8 +64,8 @@ def save():
 @app.route('/myaccount', methods=['GET', 'POST'])
 @login_required
 def myaccount():
-    article_list = db.session.query(Article).filter(Article.article != None)
-    article_url = db.session.query(Article).filter(Article.url != None)
+    article_list = db.session.query(Article).filter(Article.article != None, Article.user_id == current_user.id)
+    article_url = db.session.query(Article).filter(Article.url != None, Article.user_id == current_user.id)
 
     return render_template('myaccount.html', article_list = article_list, article_url = article_url)
 
@@ -84,7 +83,6 @@ def delete():
 
     return redirect(url_for('myaccount'))
 
-                #   company=company(name="Jawbone"))
 
 
 

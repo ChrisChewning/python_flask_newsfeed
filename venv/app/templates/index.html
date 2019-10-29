@@ -1,6 +1,5 @@
-
 <head>
-<script type="text/javascript" src="../static/javascript.js"></script> 
+    <script type="text/javascript" src="../static/javascript.js"></script> 
 </head>
 {% extends "base.html" %}
 
@@ -15,8 +14,9 @@
             <td>
                     <form action="{{ url_for('save') }}" method="POST">
                         <button class="btn btn-xs btn-warning">
-                        <input type='hidden' value= {{ waPo_article.link_url }} name="save_url" >
-                        <input type='hidden' value='{{ waPo_article.link_text }}' name="save_article" >
+                        <input type='hidden' value= {{ waPo_article.link_url }} name="save_url">
+                        <input type='hidden' value='{{ waPo_article.link_text }}' name="save_article">
+                        <input type='hidden' value='{{ waPo_article.link_summary }}' name="save_summary">
                         Save
                         </button>
                     </form>

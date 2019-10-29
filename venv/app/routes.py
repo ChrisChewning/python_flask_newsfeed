@@ -43,8 +43,7 @@ def index():
             waPo_articles.append(a)    
         else: 
             break
-
-    return render_template('index.html', waPo_articles= waPo_articles, today_str= today_str)
+    return render_template('index.html', waPo_articles=waPo_articles, today_str=today_str)
 
 
 
@@ -53,8 +52,9 @@ def index():
 def save():
     save_article = request.form['save_article']
     save_url = request.form['save_url']
+    save_summary = request.form['save_summary']
     if request.method == 'POST':
-        new_row = Article(article = save_article, url=save_url, user_id = current_user.id)
+        new_row = Article(article = save_article, summary = save_summary, url = save_url, user_id = current_user.id)
         db.session.add(new_row)
         db.session.commit()
         flash('Saved')
@@ -66,8 +66,47 @@ def save():
 def myaccount():
     article_list = db.session.query(Article).filter(Article.article != None, Article.user_id == current_user.id)
     article_url = db.session.query(Article).filter(Article.url != None, Article.user_id == current_user.id)
+    article_notes = db.session.query(Article).filter(Article.user_id == current_user.id)
 
+    # print(article_list, " <-- this is article_list")
+    # print(article_notes, " <--- this is article_notes from routes.py")
     return render_template('myaccount.html', article_list = article_list, article_url = article_url)
+
+
+@app.route('/add_note', methods=['GET', 'POST'])
+@login_required
+def add_note():
+    add_note = request.form.get("add_note") #get the new note. ex: 'hello'
+    add_id = request.form.get("add_id") #get the id of the current object. 14
+    add = db.session.query(Article).filter(Article.id == add_id).\
+        update({Article.notes: add_note}) #ties the change to the session.
+    db.session.commit()
+    return redirect(url_for('myaccount'))
+
+@app.route('/edit_note', methods=['GET', 'POST'])
+@login_required
+def edit_note():
+    edit_note = request.form.get("edit_note") #get the new note. 
+    print(edit_note, " <-- edit note")
+    edit_note_id = request.form.get("edit_note_id") #get the id of the current object. 14
+    print(edit_note_id, " <-- edit note id")
+    edit = db.session.query(Article).filter(Article.id == edit_note_id).\
+        update({Article.notes: edit_note}) #ties the change to the session.
+    db.session.commit()
+    return redirect(url_for('myaccount'))
+
+@app.route('/delete_note', methods=['GET', 'POST'])
+@login_required
+def delete_note():
+    delete_note = request.form.get("delete_note") #get the new note. 
+    print(delete_note, " <-- delete note")
+    delete_note_id = request.form.get("delete_note_id") #get the id of the current object. 14
+    print(delete_note_id, " <-- delete note id")
+    edit = db.session.query(Article).filter(Article.id == delete_note_id).\
+        update({Article.notes: None}) 
+    db.session.commit()
+    return redirect(url_for('myaccount'))
+
 
 
 
@@ -75,7 +114,6 @@ def myaccount():
 @login_required
 def delete():
     delete_row = request.form['delete_row']  #.get('delete_row') would work also. 
-    print(delete_row, ' <-- this is delete row')
     delete = Article.query.filter_by(id=delete_row).first()
     print(delete)
     db.session.delete(delete)

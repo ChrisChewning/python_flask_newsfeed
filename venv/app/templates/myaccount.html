@@ -1,4 +1,8 @@
+<head>
+    <script type="text/javascript" src="../static/javascript.js"></script> 
+</head>
 {% extends "base.html" %}
+
 
 
 {% block content %}
@@ -7,14 +11,53 @@
 
   {% for a in article_list %}
     <a href= {{a.url}} target="_blank"><p>{{a.article}}</p></a>
-        <form action="{{ url_for('delete') }}" method="POST">
-            <button class="btn btn-xs btn-danger">
-            <input type='hidden' value= {{a.id}}  name="delete_row" >
-            Delete
-            </button>
-        </form>
-  {% endfor %}
+    <form action="{{ url_for('delete') }}" method="POST">
+        <button class="btn btn-xs btn-danger">
+        <input type='hidden' value= {{a.id}}  name="delete_row" >
+        Delete
+        </button>
+    </form>
 
+
+  {% if a.notes is not none %}
+    <p><strong>My Note:</strong> {{ a.notes }}</p>
+    
+    <button class="btn btn-xs btn-success" onclick=show_edit_note(event) style="display:show">Edit Note</button>
+
+    <form action="{{ url_for('edit_note')}}" method="POST">
+      <textarea rows="4" cols="50" required=True name="edit_note" type="text" style="display:none">{{a.notes}}</textarea> 
+      <button class="btn btn-primary btn-xs" onclick=edit_note(event) style="display:none">
+        <input type='hidden' value="{{a.notes}}" name="edit_note"> 
+        <input type='hidden' value="{{a.id}}" name="edit_note_id">
+          Submit
+        </button>
+    </form>
+  
+    <form action="{{ url_for('delete_note')}}" method="POST">
+        <button class="btn btn-primary btn-xs">
+          <input type='hidden' value="{{a.notes}}" name="delete_note"> 
+          <input type='hidden' value="{{a.id}}" name="delete_note_id">
+            Delete Note
+          </button>
+      </form>
+    
+
+    {% else %}
+   
+
+    <button class="btn btn-xs btn-success" onclick=show_new_note(event) style="display:show">Add Note</button>
+
+    <form action="{{ url_for('add_note')}}" method="POST">
+      <textarea rows="4" cols="50" required=True name="add_note" type="text" style="display:none"></textarea> 
+      <button class="btn btn-xs btn-success" onclick=add_new_note(event) style="display:none">
+          <input type='hidden' value= "{{a}}" name="add_a">
+          <input type='hidden' value= "{{a.id}}" name="add_id">
+          <input type='hidden' value= "{{a.notes}}" name="add_anote">
+          Submit
+      </button>
+    </form>
+  {% endif %}
+  {% endfor %}
 
 {% endblock %}
 

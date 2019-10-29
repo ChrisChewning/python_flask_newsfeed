@@ -23,3 +23,7 @@
 .my-note{
   margin-left: 10px;
 }
+
+.notes-not-none{
+  background-color: red;
+}

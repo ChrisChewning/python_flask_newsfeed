@@ -11,12 +11,35 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 
 source = requests.get('https://www.washingtonpost.com/').text
-soup = BeautifulSoup(source, 'lxml')
+source2 = requests.get('https://www.nytimes.com/').text
+ 
 
+#WASHINGTON POST
+soup = BeautifulSoup(source, 'lxml')
 front_page = soup.find("section", {"id": "main-content"})
 articles = front_page.findAll(True, {'class':['headline x-small normal-style text-align-inherit', 'headline small normal-style text-align-inherit', 'headline xx-small normal-style text-align-inherit']})
-                                                                                                                  
 
+#NY TIMES
+soup2 = BeautifulSoup(source2, 'lxml')
+front_page2 = soup2.find("main", {"id": "site-content"})                                                         
+articles2 = front_page2.findAll(True, {'class':['css-6p6lnl', 'css-qvz0vj']}) #class_='css-6p6lnl'.split())  #css-qvz0vj eqveam61  #css-1ez5fsm esl82me1
+
+
+for a in articles2:
+    link = a.find('a')
+    summary = a.find('p')
+    print(a.h2.text, ' <-- link text')
+    print(summary)
+    # print(summary.getText(), ' <-- summary')  need to put in an if check. 
+    print ("{}{}".format('www.nytimes.com', link['href'])) #URL
+    print(' ')
+
+
+def nytimes():
+    count = 0
+    nyt_articles = []
+    for article in articles2:
+        print(article)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

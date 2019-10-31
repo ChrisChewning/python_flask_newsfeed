@@ -1,3 +1,4 @@
+/* NAVBAR */
 @media (min-width: 768px) {
   .navbar-nav.navbar-center {
     position: absolute;
@@ -5,6 +6,35 @@
     transform: translatex(-50%);
   }
 }
+
+.navigation-bar{
+  background-color: #d7e7f5;
+}
+
+
+/* HOME PAGE */
+
+.container-fluid{
+  background-color: #e6ffff;
+  width: 66.6%;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 0;
+  margin-top: 25px;
+}
+
+
+.publication-title{
+  background-color: navy;
+  color: white;
+  padding: 10px;
+  margin: 0 0 10 0;
+  border-radius: 10px 10px 0 0;
+}
+
+
+
+/* MY ACCOUNT PAGE */
 
 .articles-notes{
   display: flex;
@@ -25,24 +55,9 @@
   background-color: red;
 }
 
-
-.container-fluid{
-  background-color: #e6ffff;
-  width: 75%;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 0;
-}
-
-
-.publication-title{
-  background-color: navy;
-  color: white;
-  padding: 10px;
-  margin: 0 0 10 0;
-  border-radius: 10px 10px 0 0;
-}
-
-.navigation-bar{
-  background-color: #d7e7f5;
+.logout-btn{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }

@@ -44,7 +44,7 @@
   <div class= "articles-notes">
     <p class="my-note"><strong>My Note:</strong> {{ a.notes }}</p>
     <span>
-      <button class="btn btn-xs btn-success column" onclick=show_edit_note(event) style="display:show">Edit Note</button>
+      <button class="btn btn-xs btn-primary column" onclick=show_edit_note(event) style="display:show">Edit Note</button>
     </span>
 
     <form action="{{ url_for('edit_note')}}" method="POST">

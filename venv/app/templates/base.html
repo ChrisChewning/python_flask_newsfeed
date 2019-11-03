@@ -12,8 +12,8 @@
 
 <body>
         {% block navbar %}
-    <nav class="navbar navbar-default navigation-bar" role="navigation">
-        <div class="collapse navbar-collapse">
+    <!-- <nav class="navbar navbar-default navigation-bar" role="navigation"> -->
+        <div class="navbar navbar-default navigation-bar">
             <h3 class="navbar-brand navbar-nav navbar-center">The News</h3>
             {% if current_user.is_anonymous %}
             <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('login') }}">Login</a>
@@ -23,7 +23,7 @@
             {% endif %}
             <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('index') }}">Home</a>
         </div>
-    </nav>    
+    <!-- </nav>     -->
         {% endblock %}
 
     {% with messages = get_flashed_messages() %}

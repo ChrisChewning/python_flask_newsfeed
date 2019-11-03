@@ -1,6 +1,6 @@
 
 function summary(event){
-    event.target.nextElementSibling.nextElementSibling.classList.toggle("show")
+    // event.target.nextElementSibling.nextElementSibling.classList.toggle("show")
     console.log(event.target)
 }
 

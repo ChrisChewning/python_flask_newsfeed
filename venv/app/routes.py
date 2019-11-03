@@ -13,6 +13,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 source = requests.get('https://www.washingtonpost.com/').text
 source2 = requests.get('https://www.nytimes.com/').text
 source3 = requests.get('https://www.statesman.com/').text
+source4 = requests.get('https://www.espn.com/boston/').text
 
 #WASHINGTON POST
 soup = BeautifulSoup(source, 'lxml')
@@ -24,13 +25,16 @@ soup2 = BeautifulSoup(source2, 'lxml')
 front_page2 = soup2.find("main", {"id": "site-content"})                                                         
 nytimes = front_page2.findAll(True, {'class':['css-6p6lnl', 'css-omcqsq' ]})[:11]  #class_='css-6p6lnl'.split())  #css-qvz0vj eqveam61  #css-1ez5fsm esl82me1
 # print(nytimes, '<-- this is nytimes')
+
 #AUSTIN AMERICAN STATESMAN 
 soup3 = BeautifulSoup(source3, 'lxml')
 front_page3 = soup3.find("section", {"id": "featured"})  #gets the main page. 
-aas = front_page3.findAll("article", {"class": "summary"})
-# print(aas, ' <-- this is aas')
+aas = front_page3.findAll("article", {"class": ["summary", "inner"]})
 
-
+#ESPN BOSTON
+soup4 = BeautifulSoup(source4, 'lxml')
+front_page4 = soup4.find("div", {"id": "news-feed-content"})
+espnb = front_page4.findAll(True, {'class': ['item-info-wrap']})
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -71,12 +75,8 @@ def index():
             b['link_summary'] = 'No Summary' #print('No summary')
         else: 
             b['link_summary'] = summary.text       
-        # if count ==20:
-        #     break
 
         waPo_articles.append(b)
-        print(nyta, '<-- this is nyta')
-        # print(waPo_articles)
 
     for aas_article in aas:
         c = { } 
@@ -84,11 +84,32 @@ def index():
         c['link_url'] = aas_article.find('a')['href']
         # c['summary'] = aas_article.span.text
         count +=1
-        if count >=30:
+        if count >=31:
             break
         waPo_articles.append(c)
-        print(c, ' <-- this is c')
         
+    for e in espnb:
+        # print(e)
+        # print(' ')
+        d = { } 
+        summary = e.find('p')
+        if summary == None:
+            continue
+        else:
+            d['link_summary'] = e.find('p')
+
+        d['link_text'] = e.h1.text
+        d['link_url'] = ("{}{}".format('https://www.espn.com/boston', e.find('a')['href']))   
+        count +=1
+        if count >=45:
+            break
+        waPo_articles.append(d)
+
+        print(d)
+
+
+
+
     return render_template('index.html', waPo_articles=waPo_articles, today_str=today_str)
 
 

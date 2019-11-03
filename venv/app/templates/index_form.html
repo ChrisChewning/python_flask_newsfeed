@@ -1,11 +1,16 @@
-<div class="row articles-notes">
+<head>
+    <script type="text/javascript" src="../static/javascript.js"></script>
+
+</head>
+
+<div class="row-fluid articles-notes">
         <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
         <span>
-            <button type="button summary" class="btn btn-primary btn-xs column" onclick=summary(event)>Summary</button>
+            <button type="submit" class="btn btn-primary btn-xs column" onclick=summary(event)>Summary</button>
         </span>
             <td>
                 <form action="{{ url_for('save') }}" method="POST">
-                    <button class="btn btn-xs btn-warning column">
+                    <button type="submit" class="btn btn-xs btn-warning column">
                     <input type='hidden' value= {{ waPo_article.link_url }} name="save_url">
                     <input type='hidden' value='{{ waPo_article.link_text }}' name="save_article">
                         <span>

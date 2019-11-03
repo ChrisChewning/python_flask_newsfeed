@@ -1,45 +1,43 @@
 <head>
-    <script type="text/javascript" src="../static/javascript.js"></script> 
+    <script type="text/javascript" src="../static/javascript.js"></script>
 </head>
 {% extends "base.html" %}
 
-
 {% block content %}
+
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  <ul class="flashes">
+     {% for message in messages %}
+      <div class="message_flash">{{ message }}</div>
+     {% endfor %}
+ </ul>
+{% endif %}
+{% endwith %}
+
+
     <div class="container-fluid">
         <h4 class='publication-title'>Washington Post</h4>
-        {% for waPo_article in waPo_articles %}
-        <div class="row articles-notes">
-            <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
-            <span>
-                <button type="button summary" class="btn btn-primary btn-xs column" onclick=summary(event)>Summary</button>
-            </span>
-                <td>
-                    <form action="{{ url_for('save') }}" method="POST">
-                        <button class="btn btn-xs btn-warning column">
-                        <input type='hidden' value= {{ waPo_article.link_url }} name="save_url">
-                        <input type='hidden' value='{{ waPo_article.link_text }}' name="save_article">
-                            <span>
-                        <input type='hidden' value='{{ waPo_article.link_summary }}' name="save_summary">
-                            </span>
-                        Save
-                        </button>
-                    </form>
-                </td>
-            <p class="hide" id="summary">{{ waPo_article.link_summary }}</p>
-        </div>
+        {% for waPo_article in waPo_articles[:10] %}
+        {% include "index_form.html" %}
         {% endfor %}
     </div>
-        
+
     <div class="container-fluid">
         <h4 class='publication-title'>NY Times</h4>
-        <p>future work here</p>
+        {% for waPo_article in waPo_articles[10:20] %}
+        {% include "index_form.html" %}
+        {% endfor %}
+
     </div>
-            
+
     <div class="container-fluid">
-        <h4 class='publication-title'>Austin, TX Reddit</h4>
-        <p>future work here</p>
-    </div> 
+        <h4 class='publication-title'>Austin American Statesman</h4>
+        {% for waPo_article in waPo_articles[21:30] %}
+        {% include "index_form.html" %}
+        {% endfor %}
+    </div>
 
 
-    
 {% endblock %}

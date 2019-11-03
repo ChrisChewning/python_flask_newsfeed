@@ -12,7 +12,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 source = requests.get('https://www.washingtonpost.com/').text
 source2 = requests.get('https://www.nytimes.com/').text
- 
+source3 = requests.get('https://www.statesman.com/').text
 
 #WASHINGTON POST
 soup = BeautifulSoup(source, 'lxml')
@@ -22,24 +22,15 @@ articles = front_page.findAll(True, {'class':['headline x-small normal-style tex
 #NY TIMES
 soup2 = BeautifulSoup(source2, 'lxml')
 front_page2 = soup2.find("main", {"id": "site-content"})                                                         
-articles2 = front_page2.findAll(True, {'class':['css-6p6lnl', 'css-qvz0vj']}) #class_='css-6p6lnl'.split())  #css-qvz0vj eqveam61  #css-1ez5fsm esl82me1
+nytimes = front_page2.findAll(True, {'class':['css-6p6lnl', 'css-omcqsq' ]})[:11]  #class_='css-6p6lnl'.split())  #css-qvz0vj eqveam61  #css-1ez5fsm esl82me1
+# print(nytimes, '<-- this is nytimes')
+#AUSTIN AMERICAN STATESMAN 
+soup3 = BeautifulSoup(source3, 'lxml')
+front_page3 = soup3.find("section", {"id": "featured"})  #gets the main page. 
+aas = front_page3.findAll("article", {"class": "summary"})
+# print(aas, ' <-- this is aas')
 
 
-for a in articles2:
-    link = a.find('a')
-    summary = a.find('p')
-    print(a.h2.text, ' <-- link text')
-    print(summary)
-    # print(summary.getText(), ' <-- summary')  need to put in an if check. 
-    print ("{}{}".format('www.nytimes.com', link['href'])) #URL
-    print(' ')
-
-
-def nytimes():
-    count = 0
-    nyt_articles = []
-    for article in articles2:
-        print(article)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -66,6 +57,38 @@ def index():
             waPo_articles.append(a)    
         else: 
             break
+
+    for nyta in nytimes:
+        b = { }
+        if nyta.h2 is None:
+            continue  
+        elif count <20: 
+            count +=1
+        b['link_text'] = nyta.h2.text        
+        b['link_url'] = ("{}{}".format('https://www.nytimes.com', nyta.find('a')['href']))        
+        summary = nyta.find('p')
+        if summary == None:
+            b['link_summary'] = 'No Summary' #print('No summary')
+        else: 
+            b['link_summary'] = summary.text       
+        # if count ==20:
+        #     break
+
+        waPo_articles.append(b)
+        print(nyta, '<-- this is nyta')
+        # print(waPo_articles)
+
+    for aas_article in aas:
+        c = { } 
+        c['link_text'] = aas_article.span.text
+        c['link_url'] = aas_article.find('a')['href']
+        # c['summary'] = aas_article.span.text
+        count +=1
+        if count >=30:
+            break
+        waPo_articles.append(c)
+        print(c, ' <-- this is c')
+        
     return render_template('index.html', waPo_articles=waPo_articles, today_str=today_str)
 
 
@@ -90,9 +113,6 @@ def myaccount():
     article_list = db.session.query(Article).filter(Article.article != None, Article.user_id == current_user.id)
     article_url = db.session.query(Article).filter(Article.url != None, Article.user_id == current_user.id)
     article_notes = db.session.query(Article).filter(Article.user_id == current_user.id)
-
-    # print(article_list, " <-- this is article_list")
-    # print(article_notes, " <--- this is article_notes from routes.py")
     return render_template('myaccount.html', article_list = article_list, article_url = article_url)
 
 

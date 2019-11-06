@@ -11,26 +11,20 @@
   <h3>My Saved Articles</h3>
 </div>
   {% for a in article_list %}
-    <div class= "articles-notes">
       <div class="articles-title">
     <a href= {{a.url}} target="_blank"><p>{{a.article}}</p></a>
   </div>
-    <form action="{{ url_for('delete') }}" method="POST">
-        <button class="btn btn-xs btn-danger column">
-        <input type='hidden' value= {{a.id}}  name="delete_row" >
-        Delete Article
-        </button>
-    </form>
-
-
-    {% if a.notes is none %}
-
-      <button class="btn btn-warning btn-xs column edit-add-note" onclick=show_new_note(event) style="display:show">Add Note</button>
+  <div class= "articles-notes">
   
+    {% if a.notes is none %}
+    <div>
+      <button class="btn btn-warning btn-xs column edit-add-note"  id="add-note" onclick=show_new_note(event) style="display:show">Add Note</button>
+    </div>
 
-    <form action="{{ url_for('add_note')}}" method="POST">
-      <textarea rows="4" cols="50" required=True name="add_note" type="text" style="display:none"></textarea> 
-      <button class="btn btn-xs btn-success column" onclick=add_new_note(event) style="display:none">
+    <form action="{{ url_for('add_note')}}" method="POST" class='hide'>
+      <textarea rows="4" cols="50" required=True name="add_note" type="text"></textarea> 
+      
+      <button class="btn btn-success btn-xs column add-edit-submit" onclick=add_new_note(event)>
           <input type='hidden' value= "{{a}}" name="add_a">
           <input type='hidden' value= "{{a.id}}" name="add_id">
           <input type='hidden' value= "{{a.notes}}" name="add_anote">
@@ -38,26 +32,35 @@
       </button>
     </form>
 
+    <div class='articles-notes'>
+        <form action="{{ url_for('delete') }}" method="POST">
+            <button class="btn btn-xs btn-danger column show" id="delete-btn" style="display:show">
+            <input type='hidden' value= {{a.id}}  name="delete_row" >
+            Delete Article
+            </button>
+        </form>
+      </div>
+
     {% endif %}
 
   </div>
 
   {% if a.notes is not none %}
   <div class='articles-notes'>
-      <p class="my_note"><strong>My Note:</strong> {{ a.notes }}</p>
-      <button class="btn btn-xs btn-warning column edit-add-note" onclick=show_edit_note(event) style="display:show">Edit Note</button>
-
+      <p class="my_note" style="display:show"><strong>My Note:</strong> {{ a.notes }}</p>
+      <button class="btn btn-xs btn-warning column edit-add-note" onclick=show_edit_note(event)>Edit Note</button>
 
     <form action="{{ url_for('edit_note')}}" method="POST">
       <textarea rows="4" cols="50" required=True name="edit_note" type="text" style="display:none">{{a.notes}}</textarea> 
-      <button class="btn btn-success btn-xs column" onclick=edit_note(event) style="display:none">
+      <button class="btn btn-success btn-xs column add-edit-submit" onclick=edit_note(event) style="display:none">
         <input type='hidden' value="{{a.notes}}" name="edit_note"> 
         <input type='hidden' value="{{a.id}}" name="edit_note_id">
           Submit
         </button>
     </form>
 
-    <form action="{{ url_for('delete_note')}}" method="POST">
+
+    <form action="{{ url_for('delete_note')}}" method="POST" class="">
         <button class="btn btn-primary btn-xs column">
           <input type='hidden' value="{{a.notes}}" name="delete_note"> 
           <input type='hidden' value="{{a.id}}" name="delete_note_id">
@@ -65,9 +68,19 @@
           </button>
       </form>
 
+      <div class='articles-notes'>
+          <form action="{{ url_for('delete') }}" method="POST">
+              <button class="btn btn-xs btn-danger column show" id="delete-btn">
+              <input type='hidden' value= {{a.id}}  name="delete_row" >
+              Delete Article
+              </button>
+          </form>
+        </div>
 </div>
 
   {% endif %}
+
+
   {% endfor %}
 
 

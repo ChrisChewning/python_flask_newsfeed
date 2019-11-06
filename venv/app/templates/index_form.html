@@ -3,11 +3,11 @@
 
 </head>
 
-    <div class="row-fluid articles-notes">
-            <a href= {{ waPo_article.link_url }} target="_blank"><p>{{ waPo_article.link_text }}</p></a>
+    <div class="row-fluid home-pg-info">
+            <a href= {{ waPo_article.link_url }} target="_blank"><p class='link_text'>{{ waPo_article.link_text }}</p></a>
                 <td>
                     <form action="{{ url_for('save') }}" method="POST">
-                        <button type="submit" class="btn btn-xs btn-warning column">
+                        <button type="submit" class="btn btn-xs btn-warning save-summary" id="save-btn">
                         <input type='hidden' value= {{ waPo_article.link_url }} name="save_url">
                         <input type='hidden' value='{{ waPo_article.link_text }}' name="save_article">
                             <span>
@@ -18,7 +18,7 @@
                     </form>
                 </td>
                 <span>
-                    <button type="submit" class="btn btn-primary btn-xs column" onclick=summary(event)>Summary</button>
+                    <button type="submit" class="btn btn-xs btn-primary save-summary" id="summary-btn" onclick=summary(event)>Summary</button>
                 </span>
             </div>
             <div>

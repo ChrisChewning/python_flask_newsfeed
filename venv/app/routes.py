@@ -72,7 +72,7 @@ def index():
         b['link_url'] = ("{}{}".format('https://www.nytimes.com', nyta.find('a')['href']))        
         summary = nyta.find('p')
         if summary == None:
-            b['link_summary'] = 'No Summary' #print('No summary')
+            b['link_summary'] = 'No Summary'
         else: 
             b['link_summary'] = summary.text       
 
@@ -82,7 +82,7 @@ def index():
         c = { } 
         c['link_text'] = aas_article.span.text
         c['link_url'] = aas_article.find('a')['href']
-        # c['summary'] = aas_article.span.text
+        c['link_summary'] = aas_article.span.text  #same as headline. could get text that says 'updated..'
         count +=1
         if count >=31:
             break
@@ -96,7 +96,7 @@ def index():
         if summary == None:
             continue
         else:
-            d['link_summary'] = e.find('p')
+            d['link_summary'] = summary.text
 
         d['link_text'] = e.h1.text
         d['link_url'] = ("{}{}".format('https://www.espn.com/boston', e.find('a')['href']))   
@@ -116,6 +116,7 @@ def index():
 
 
 @app.route('/save', methods=['POST'])
+@login_required
 def save():
     save_article = request.form['save_article']
     save_url = request.form['save_url']
@@ -127,6 +128,10 @@ def save():
         flash('Saved')
     return redirect(url_for('index'))
 
+
+@app.errorhandler(401)
+def page_not_found(e):
+    return redirect(url_for('login'))
 
 @app.route('/myaccount', methods=['GET', 'POST'])
 @login_required
@@ -169,6 +174,7 @@ def delete_note():
     edit = db.session.query(Article).filter(Article.id == delete_note_id).\
         update({Article.notes: None}) 
     db.session.commit()
+    flash('Note Deleted')
     return redirect(url_for('myaccount'))
 
 
@@ -182,7 +188,7 @@ def delete():
     print(delete)
     db.session.delete(delete)
     db.session.commit()
-
+    flash('Note Deleted')
     return redirect(url_for('myaccount'))
 
 

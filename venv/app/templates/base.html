@@ -11,6 +11,18 @@
 </head>
 
 <body>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+
+
         {% block navbar %}
     <!-- <nav class="navbar navbar-default navigation-bar" role="navigation"> -->
         <div class="navbar navbar-default navigation-bar">
@@ -25,19 +37,6 @@
         </div>
     <!-- </nav>     -->
         {% endblock %}
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    
-    {% block content %}
-    {% endblock %}
 
 </body>       
 

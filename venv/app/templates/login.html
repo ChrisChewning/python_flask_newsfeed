@@ -8,19 +8,20 @@
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>
-            {{ form.username }}
+            <p class="login-input">{{ form.username }}</p>
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.password.label }}<br>
-            {{ form.password }}
+            {{ form.password.label }}
+            <br>
+            <p class="login-input">{{ form.password }}</p>
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p id='remember-me'>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p id="remember_me">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
         <p class="login-register-submit">{{ form.submit() }}</p>
     </form>
 

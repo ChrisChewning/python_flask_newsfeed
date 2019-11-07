@@ -24,18 +24,18 @@
 
 
         {% block navbar %}
-    <!-- <nav class="navbar navbar-default navigation-bar" role="navigation"> -->
-        <div class="navbar navbar-default navigation-bar">
-            <h3 class="navbar-brand navbar-nav navbar-center">The News</h3>
-            {% if current_user.is_anonymous %}
-            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('login') }}">Login</a>
-            {% else %}
-            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('logout') }}">Logout</a>
-            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('myaccount') }}">My Account</a>
-            {% endif %}
-            <a class="navbar-brand navbar-nav navbar-right" href="{{ url_for('index') }}">Home</a>
-        </div>
-    <!-- </nav>     -->
+            <div class="navbar navbar-default navigation-bar">
+                <h3 class="navbar-brand navbar-nav navbar-center" id="title">The News</h3>
+                <div class='navigation-links'>
+                    <a href="{{ url_for('index') }}" class="home-account-link">Home</a>
+                    <a href="{{ url_for('myaccount') }}" class="home-account-link">My Account</a>
+                        {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                        {% else %}
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                    {% endif %}
+                </div>
+            </div>
         {% endblock %}
 
 </body>       
